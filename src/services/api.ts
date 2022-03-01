@@ -5,17 +5,4 @@ const api = axios.create({
 	headers: {},
 });
 
-api.interceptors.response.use(
-	(response) => {
-		return response.data;
-	},
-	(error) => {
-		const data = {
-			...error.response,
-			mensagem: error.response.data.mensagem ?? "Por favor, verifique sua conexão ou tente novamente mais tarde.",
-		};
-		return Promise.reject(data);
-	}
-);
-
 export { api };

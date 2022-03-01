@@ -31,12 +31,12 @@ export const Container = styled.div`
 				border-radius: 0 0.25rem 0.25rem 0;
 			}
 
-			&.withdraw {
-				color: var(--red);
+			&.income {
+				color: var(--green);
 			}
 
-			&.deposit {
-				color: var(--green);
+			&.outcome {
+				color: var(--red);
 			}
 		}
 	}

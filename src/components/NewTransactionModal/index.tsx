@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import Modal from "react-modal";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
+import { api } from "../../services/api";
 
 import { ButtonType, ButtonTypeContainer, Container } from "./styles";
 
@@ -12,7 +13,15 @@ interface NewTransactionModalProps {
 }
 
 const NewTransactionModal: React.FC<NewTransactionModalProps> = ({ isOpen, onRequestClose }) => {
-	const [selectedType, setSelectedType] = useState<"income" | "outcome">("income");
+	const [title, setTitle] = useState("");
+	const [value, setValue] = useState(0);
+	const [type, setType] = useState<"income" | "outcome">("income");
+	const [category, setCategory] = useState("");
+
+	const handleNewTransaction = (event: FormEvent) => {
+		event.preventDefault();
+		api.post("transactions", { title, value, type, category }).then((response) => console.log(response));
+	};
 
 	return (
 		<Modal
@@ -21,35 +30,41 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = ({ isOpen, onReq
 			overlayClassName="react-modal-overlay"
 			className="react-modal-content"
 		>
-			<Container>
+			<Container onSubmit={handleNewTransaction}>
 				<h2>Cadastrar transação</h2>
 
 				<button onClick={onRequestClose} type="button" className="react-modal-close">
 					<img src={closeImg} alt="Fechar modal" />
 				</button>
-				<input name="title" placeholder="Título" />
-				<input name="value" type="number" placeholder="Valor" />
+				<input name="title" placeholder="Título" value={title} onChange={(event) => setTitle(event.target.value)} />
+				<input
+					name="value"
+					type="number"
+					placeholder="Valor"
+					value={value}
+					onChange={(event) => setValue(Number(event.target.value))}
+				/>
 				<ButtonTypeContainer>
-					<ButtonType
-						type="button"
-						isActive={selectedType === "income"}
-						activeType="income"
-						onClick={() => setSelectedType("income")}
-					>
+					<ButtonType type="button" isActive={type === "income"} activeType="income" onClick={() => setType("income")}>
 						<img src={incomeImg} alt="Entrada" />
 						<span>Entrada</span>
 					</ButtonType>
 					<ButtonType
 						type="button"
-						isActive={selectedType === "outcome"}
+						isActive={type === "outcome"}
 						activeType="outcome"
-						onClick={() => setSelectedType("outcome")}
+						onClick={() => setType("outcome")}
 					>
 						<img src={outcomeImg} alt="Saída" />
 						<span>Saída</span>
 					</ButtonType>
 				</ButtonTypeContainer>
-				<input name="category" placeholder="Categoria" />
+				<input
+					name="category"
+					placeholder="Categoria"
+					value={category}
+					onChange={(event) => setCategory(event.target.value)}
+				/>
 				<button type="submit">Cadastrar</button>
 			</Container>
 		</Modal>
