@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { darken, transparentize } from "polished";
 
 export const Container = styled.form`
 	h2 {
@@ -44,5 +45,52 @@ export const Container = styled.form`
 		&:hover {
 			filter: brightness(0.9);
 		}
+	}
+`;
+
+export const ButtonTypeContainer = styled.div`
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0.5rem;
+	margin: 1rem 0;
+`;
+
+interface ButtonTypeProps {
+	isActive: boolean;
+	activeType: "income" | "outcome";
+}
+
+const colors = {
+	income: "#33cc95",
+	outcome: "#e52e4d",
+};
+
+export const ButtonType = styled.button<ButtonTypeProps>`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.7rem;
+
+	height: 4rem;
+	padding: 1rem 2rem;
+
+	border: 1px solid #d7d7d7;
+	border-radius: 0.25rem;
+	background: ${({ isActive, activeType }) => (isActive ? transparentize(0.9, colors[activeType]) : "transparent")};
+
+	transition: border-color 0.2s;
+
+	&:hover {
+		border-color: ${darken(0.1, "#d7d7d7")};
+	}
+
+	img {
+		width: 20px;
+		height: 20px;
+	}
+
+	span {
+		color: var(--text-title);
+		font-size: 1rem;
 	}
 `;
