@@ -22,7 +22,7 @@ createServer({
 				{
 					id: 2,
 					title: "Compras Morais",
-					amount: 460,
+					amount: 450,
 					type: "outcome",
 					category: "Comida",
 					createdAt: new Date("2021-02-15 8:00:00"),

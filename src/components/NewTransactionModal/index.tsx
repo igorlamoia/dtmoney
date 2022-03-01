@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
-import { api } from "../../services/api";
+import { useTransactions } from "../../hooks/useTransactions";
 
 import { ButtonType, ButtonTypeContainer, Container } from "./styles";
 
@@ -17,10 +17,16 @@ const NewTransactionModal: React.FC<NewTransactionModalProps> = ({ isOpen, onReq
 	const [value, setValue] = useState(0);
 	const [type, setType] = useState<"income" | "outcome">("income");
 	const [category, setCategory] = useState("");
+	const { createTransaction } = useTransactions();
 
-	const handleNewTransaction = (event: FormEvent) => {
+	const handleNewTransaction = async (event: FormEvent) => {
 		event.preventDefault();
-		api.post("transactions", { title, value, type, category }).then((response) => console.log(response));
+		await createTransaction({ title, amount: value, type, category });
+		setTitle("");
+		setValue(0);
+		setType("income");
+		setCategory("");
+		onRequestClose();
 	};
 
 	return (
